@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juegos</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .iframe-container iframe {
+      width: 100%;
+      height: 500px;
+    }
+    .form-container {
+      margin: 20px 0;
+    }
+  </style>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5888500221878111"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Juegos y el resto</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <form class="form-inline my-2 my-lg-0 ml-auto">
+        <input class="form-control mr-sm-2" type="search" id="search-bar" placeholder="Buscar juegos o publicaciones..." aria-label="Search">
+      </form>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <div class="container my-5">
+    <h2>Juegos</h2>
+    <div class="row" id="juegos-container"></div>
+
+    <h2 class="mt-5">Publicaciones</h2>
+    <div class="form-container">
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfz1lF3C8RkRw3WKSte0ab30FBMqP0APgiVQsfIvb2wd5rYgQ/viewform?usp=sf_link" width="100%" height="600px" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
+    </div>
+    <div class="row" id="publicaciones-container"></div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    const juegos = [
+      { "nombre": "Drive Mad", "descripcion": "Coches", "iframe_url": "https://drivemadonline.github.io/" },
+      { "nombre": "Eaglecraft", "descripcion": "Minecraft", "iframe_url": "https://eaglercraft.com/mc/1.8.8/" },
+      { "nombre": "IA", "descripcion": "Inteligencia artificial", "iframe_url": "https://chatgpt.es/" },
+      { "nombre": "buildnow", "descripcion": "pvp", "iframe_url": "https://buildnow-gg.io/" },
+      { "nombre": "extreme drift 2", "descripcion": "drift", "iframe_url": "https://www.minijuegos.com/juego/xtreme-drift-2" },
+      { "nombre": "tribals", "descripcion": "tribus pelea", "iframe_url": "https://tribals.io/" },
+    ];
+
+    function cargarJuegos() {
+      const juegosContainer = document.getElementById('juegos-container');
+      juegos.forEach(juego => {
+        const juegoCard = document.createElement('div');
+        juegoCard.className = 'col-md-12 my-3';
+        juegoCard.innerHTML = `
+          <div class="card p-4">
+            <h5 class="card-title">${juego.nombre}</h5>
+            <p class="card-text">${juego.descripcion}</p>
+            <button class="btn btn-success load-game-btn" data-url="${juego.iframe_url}">Cargar juego</button>
+            <button class="btn btn-primary fullscreen-btn" style="display:none;">Pantalla Completa</button>
+            <div class="iframe-container mt-3" style="display:none;">
+              <iframe class="game-iframe" src="" allowfullscreen></iframe>
+            </div>
+          </div>
+        `;
+        juegosContainer.appendChild(juegoCard);
+      });
+    }
+
+    document.addEventListener('click', function(e) {
+      if (e.target && e.target.classList.contains('load-game-btn')) {
+        const iframeContainer = e.target.closest('.card').querySelector('.iframe-container');
+        const iframe = iframeContainer.querySelector('iframe');
+        const gameUrl = e.target.getAttribute('data-url');
+        const fullscreenBtn = e.target.nextElementSibling;
+
+        iframe.src = gameUrl;
+        iframeContainer.style.display = 'block';
+        e.target.disabled = true;
+        e.target.textContent = 'Juego cargado';
+        fullscreenBtn.style.display = 'inline-block';
+      }
+
+      if (e.target && e.target.classList.contains('fullscreen-btn')) {
+        const iframe = e.target.closest('.card').querySelector('iframe');
+        toggleFullscreen(iframe);
+      }
+    });
+
+    function toggleFullscreen(iframe) {
+      if (!document.fullscreenElement) {
+        iframe.requestFullscreen().catch(err => {
+          console.error(`Error intentando activar pantalla completa: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    cargarJuegos();
+  </script>
+
+</body>
+</html>
